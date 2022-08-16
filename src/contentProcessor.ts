@@ -17,7 +17,7 @@ import {
 } from "./config";
 import { linkHashes } from "./linksHash";
 
-export function imageTagProcessor(app: App, mediaDir: string) {
+export function imageTagProcessor(app: App, mediaDir: string, mediaRootDirectory: string) {
   async function processImageTag(match: string, anchor: string, link: string) {
     if (!isUrl(link)) {
       return match;
@@ -44,7 +44,7 @@ export function imageTagProcessor(app: App, mediaDir: string) {
           }
 
           if (fileName) {
-            return `![${anchor}](${fileName})`;
+            return `![${anchor}](${mediaRootDirectory}/${fileName.split(`${mediaRootDirectory}/`).pop()})`;
           } else {
             return match;
           }

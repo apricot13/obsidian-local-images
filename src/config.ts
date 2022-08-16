@@ -35,5 +35,5 @@ export const DEFAULT_SETTINGS: ISettings = {
   cleanContent: true,
   showNotifications: false,
   include: ".*\\.md",
-  mediaRootDirectory: "media",
+  mediaRootDirectory: "attachments",
 };

@@ -29,7 +29,9 @@ export default class LocalImagesPlugin extends Plugin {
     // const content = await this.app.vault.read(file);
     const content = await this.app.vault.cachedRead(file);
 
-    await this.ensureFolderExists(this.settings.mediaRootDirectory);
+    const myAttachmentsFolder = `${file.path.split("/").slice(0,-1).join("/")}/${this.settings.mediaRootDirectory}/${file.basename}`;
+
+    await this.ensureFolderExists(myAttachmentsFolder);
 
     const cleanedContent = this.settings.cleanContent
       ? cleanContent(content)
@@ -37,7 +39,7 @@ export default class LocalImagesPlugin extends Plugin {
     const fixedContent = await replaceAsync(
       cleanedContent,
       EXTERNAL_MEDIA_LINK_PATTERN,
-      imageTagProcessor(this.app, this.settings.mediaRootDirectory)
+      imageTagProcessor(this.app, myAttachmentsFolder, this.settings.mediaRootDirectory)
     );
 
     if (content != fixedContent) {
@@ -330,7 +332,7 @@ class SettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName("Media folder")
-      .setDesc("Folder to keep all downloaded media files.")
+      .setDesc("Folder to keep all downloaded media files relative to current file.")
       .addText((text) =>
         text
           .setValue(this.plugin.settings.mediaRootDirectory)
